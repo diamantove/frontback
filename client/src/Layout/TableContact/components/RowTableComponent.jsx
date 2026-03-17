@@ -1,9 +1,9 @@
-const RowTableComponent = () => {
+const RowTableComponent = (props) => {
     return (
         <tr>
-            <td>1</td>
-            <td>Имя контакта 1</td>
-            <td>example1@mail.ru</td>
+            <td>{props.id}</td>
+            <td>{props.name}</td>
+            <td>{props.email}</td>
         </tr>
     );
 }

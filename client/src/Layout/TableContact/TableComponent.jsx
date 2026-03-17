@@ -1,6 +1,6 @@
 import RowTableComponent from "./components/RowTableComponent";
 
-const TableComponent = () => {
+const TableComponent = (props) => {
     return (
         <table className="table table-hover">
             <thead>
@@ -12,11 +12,15 @@ const TableComponent = () => {
             </thead>
 
             <tbody>
-                <RowTableComponent />
-                <RowTableComponent />
-                <RowTableComponent />
-                <RowTableComponent />
-                <RowTableComponent />
+                {
+                    props.contacts.map(
+                        item => (
+                        <RowTableComponent id={item.id}
+                                            name={item.name}
+                                            email={item.email}/>
+                        )
+                    )
+                }
             </tbody>
         </table>
     )
