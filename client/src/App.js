@@ -1,50 +1,18 @@
 import './App.css';
-
+import RowTableComponent from './Layout/TableContact/components/RowTableComponent';
+import TableComponent
+ from './Layout/TableContact/TableComponent';
 function App() {
   return (
-    <div>
-      <div>
-        <div>
-          <h1>Список контактов</h1>
+      <div className="container mt-5">
+        <div className="card">
+          <h1 className="card-header">Список контактов</h1>
         </div>
 
-        <table>
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Имя контакта</th>
-              <th>E-mail</th>
-            </tr>
-          </thead>
-
-          <tbody>
-              <tr>
-                <td>1</td>
-                <td>Имя файла 1</td>
-                <td>example1@mail.ru</td> 
-              </tr>
-              
-              <tr>
-                <td>2</td>
-                <td>Имя файла 2</td>
-                <td>example2@mail.ru</td> 
-              </tr>
-
-              <tr>
-                <td>3</td>
-                <td>Имя файла 3</td>
-                <td>example3@mail.ru</td> 
-              </tr>
-
-              <tr>
-                <td>4</td>
-                <td>Имя файла 4</td>
-                <td>example4@mail.ru</td> 
-              </tr>
-          </tbody>
-        </table>
+        <div className="card-body">
+          <TableComponent/>
+        </div>
       </div>
-    </div>
   );
 }
 
