@@ -1,27 +1,41 @@
 import './App.css';
+import FormComponent from './Layout/FormContact/FormComponent';
 import TableComponent
 from './Layout/TableContact/TableComponent';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
-
+const baseApiUrl = process.env.REACT_APP_API_URL;
 
 function App() {
-  let [contacts, setContacts] = useState([
-    { id: 1, name: "Имя Фамилия 1", email: "mail1@mail.ru" },
-    { id: 2, name: "Имя Фамилия 2", email: "mail2@mail.ru" },
-    { id: 5, name: "Имя Фамилия 3", email: "mail3@mail.ru" },
-  ]);
+  const url = `${baseApiUrl}/contacts`
 
-  const addContact = () => {
-    let num = Math.max(...contacts.map(item => item.id)) + 1;
+  let [contacts, setContacts] = useState([]);
+
+  useEffect(() => {
+    axios.get(url).then(
+      res => setContacts(res.data)
+    );
+  }, [])
+
+
+  const addContact = (name, email) => {
+    let num = contacts.length > 0 ? Math.max(...contacts.map(item => item.id)) + 1 : 1;
 
     let item = {
       id: num,
-      name: `Имя Фамилия ${num}`,
-      email: `mail${num}@mail.ru`
+      name: name,
+      email: email
     }
 
+    axios.post(url, item);
     setContacts([...contacts,item]);
+  }
+
+  const deleteContact = (id) => {
+    axios.delete(`${url}/${id}`);
+    
+    setContacts(contacts.filter(item => item.id !== id))
   }
 
   return (
@@ -30,15 +44,12 @@ function App() {
           <h1 className="card-header">Список контактов</h1>
         </div>
 
-        <div className="card-body">
-          <TableComponent contacts={contacts}/>
-        </div>
-        <button 
-          className="btn btn-primary" 
-          onClick={() => addContact()}>
-            Добавить человека
-        </button>
+        <TableComponent contacts={contacts}
+                        deleteContact={deleteContact}/>
+        <FormComponent addContact={addContact}
+        />
       </div>
+
   );
 }
 

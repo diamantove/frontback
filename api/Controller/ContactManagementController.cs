@@ -2,9 +2,9 @@ using Microsoft.AspNetCore.Mvc;
 
 public class ContactManagementController : BaseController
 {
-    private readonly ContactStorage storage;
+    private readonly IStorage storage;
 
-    public ContactManagementController(ContactStorage storage)
+    public ContactManagementController(IStorage storage)
     {
         this.storage = storage;
     }
@@ -13,10 +13,10 @@ public class ContactManagementController : BaseController
     public IActionResult Create([FromBody] Contact contact)
     {
         bool res = storage.Add(contact);
+        
         if (res)
-        {
             return Ok(contact);
-        }
+
         return Conflict("Контакт с указанным ID существует");
     }
 

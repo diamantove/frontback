@@ -2,29 +2,15 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(opt =>
-{
-    opt.SwaggerDoc("v1", new OpenApiInfo
-    {
-        Title = "API списка контактов",
-    });
-});
-builder.Services.AddControllers();
-builder.Services.AddSingleton<ContactStorage>();
-
-builder.Services.AddCors(opt =>
-opt.AddPolicy("CorsPolicy", policy =>
-{
-    policy.AllowAnyMethod()
-    .AllowAnyHeader()
-    .WithOrigins(args[0]);
-}));
+builder.Services.AddServiceCollection(builder.Configuration);
 
 var app = builder.Build();
+// app.Services.AddCustomService(builder.Configuration);
+app.Services.AddCustomService(builder.Configuration);
+
 app.UseSwagger();
 app.UseSwaggerUI();
 
-app.MapControllers();
 app.UseCors("CorsPolicy");
+app.MapControllers();
 app.Run();

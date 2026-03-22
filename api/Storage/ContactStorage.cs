@@ -1,17 +1,20 @@
-public class ContactStorage
+public class InMemoryStorage : IStorage
 {
     private List<Contact> Contacts { get; set; }
 
-    public ContactStorage()
+    public InMemoryStorage()
     {
-        this.Contacts = new List<Contact>()
+        this.Contacts = new List<Contact>();
+
+        for (int i = 1; i <= 5; i++)
         {
-            new Contact { Id = 1, Name = "Сергей Камянецкий", Email = "i@ksergey.ru" },
-            new Contact { Id = 2, Name = "Мария Петрова", Email = "maria@example.ru" },
-            new Contact { Id = 3, Name = "Алексей Сидоров", Email = "alexey@example.ru" },
-            new Contact { Id = 4, Name = "Екатерина Кузнецова", Email = "ekaterina@example.ru" },
-            new Contact { Id = 5, Name = "Дмитрий Васильев", Email = "dmitry@example.ru" }
-        };
+            this.Contacts.Add(new Contact()
+            {
+                Id = i,
+                Name = $"Полное имя {i}",
+                Email = $"{Guid.NewGuid().ToString().Substring(0, 5)}_{i}@ksergey.ru"
+            });
+        }
     }
 
     public List<Contact> GetContacts()
