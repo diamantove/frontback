@@ -11,18 +11,23 @@ public class SqliteStorage : IStorage
         this.connectionString = connectionString;
     }
 
-    public bool Add(Contact contact)
+    public Contact Add(ContactDto contact)
     {
         using var connection = new SqliteConnection(connectionString);
         connection.Open();
 
         var command = connection.CreateCommand();
 
-        command.CommandText = "INSERT INTO contacts(name, email) VALUES (@name, @email)";
+        command.CommandText = "INSERT INTO contacts(name, email) VALUES (@name, @email) RETURNING ID";
         command.Parameters.AddWithValue("@name", contact.Name);
         command.Parameters.AddWithValue("@email", contact.Email);
 
-        return command.ExecuteNonQuery() > 0;
+        return new Contact
+        {
+            Id = Convert.ToInt32(command.ExecuteScalar()),
+            Name = contact.Name,
+            Email = contact.Email
+        };
     }
 
     public List<Contact> GetContacts()

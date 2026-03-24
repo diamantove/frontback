@@ -2,22 +2,22 @@ using Microsoft.AspNetCore.Mvc;
 
 public class ContactManagementController : BaseController
 {
-    private readonly IStorage storage;
+    private readonly IPaginationStorage storage;
 
-    public ContactManagementController(IStorage storage)
+    public ContactManagementController(IPaginationStorage storage)
     {
         this.storage = storage;
     }
 
     [HttpPost("contacts")]
-    public IActionResult Create([FromBody] Contact contact)
+    public IActionResult Create([FromBody] ContactDto contact)
     {
-        bool res = storage.Add(contact);
-        
-        if (res)
-            return Ok(contact);
+        Contact res = storage.Add(contact);
 
-        return Conflict("Контакт с указанным ID существует");
+        if (res != null)
+            return Ok(res);
+
+        return Conflict("Не удалось выполнить добавление контакта.");
     }
 
     [HttpGet("contacts")]
@@ -38,8 +38,21 @@ public class ContactManagementController : BaseController
     public IActionResult UpdateContact([FromBody] ContactDto contactDto, int id)
     {
         bool res = storage.UpdateContact(contactDto, id);
-        if (res) return Ok();
+
+        if (res)
+            return Ok();
+
         return Conflict("Контакт с указанным ID не нашёлся");
     }
 
+    [HttpGet("contacts/{id}")]
+    public IActionResult GetContact(int id)
+    {
+        Contact res = storage.GetContactById(id);
+
+        if (res != null)
+            return Ok(res);
+
+        return NotFound("Контакт с указанным ID не нашёлся.");
+    }
 }

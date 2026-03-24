@@ -1,16 +1,14 @@
 public class InMemoryStorage : IStorage
 {
-    private List<Contact> Contacts { get; set; }
+    private List<Contact> Contacts { get; set; } = new List<Contact>();
+    private int lastId { get; set; } = 0;
 
     public InMemoryStorage()
     {
-        this.Contacts = new List<Contact>();
-
         for (int i = 1; i <= 5; i++)
         {
-            this.Contacts.Add(new Contact()
+            this.Add(new ContactDto()
             {
-                Id = i,
                 Name = $"Полное имя {i}",
                 Email = $"{Guid.NewGuid().ToString().Substring(0, 5)}_{i}@ksergey.ru"
             });
@@ -22,17 +20,18 @@ public class InMemoryStorage : IStorage
         return Contacts;
     }
 
-    public bool Add(Contact contact)
+    public Contact Add(ContactDto contact)
     {
-        foreach (var item in Contacts)
+        Contact newContact = new Contact
         {
-            if (contact.Id == item.Id)
-            {
-                return false;
-            }
-        }
-        Contacts.Add(contact);
-        return true;
+            Id = ++lastId,
+            Name = contact.Name,
+            Email = contact.Email
+        };
+
+        Contacts.Add(newContact);
+
+        return newContact;
     }
 
     public bool Remove(int id)
@@ -71,4 +70,6 @@ public class InMemoryStorage : IStorage
         }
         return false;
     }
+
+
 }

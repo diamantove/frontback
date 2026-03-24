@@ -46,7 +46,7 @@ public class FakerInitializer : IInitializer
                 command.Parameters.Clear();
                 command.Parameters.AddWithValue("@name", contact.Name);
                 command.Parameters.AddWithValue("@mail", contact.Email);
-                
+
                 command.ExecuteNonQuery();
             }
         }

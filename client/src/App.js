@@ -4,6 +4,8 @@ import TableComponent
 from './Layout/TableContact/TableComponent';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import {Route, Routes} from 'react-router-dom';
+import ContactDetails from './Layout/ContanctDetails/ContactDetails';
 
 const baseApiUrl = process.env.REACT_APP_API_URL;
 
@@ -20,36 +22,33 @@ function App() {
 
 
   const addContact = (name, email) => {
-    let num = contacts.length > 0 ? Math.max(...contacts.map(item => item.id)) + 1 : 1;
-
     let item = {
-      id: num,
       name: name,
       email: email
     }
 
-    axios.post(url, item);
-    setContacts([...contacts,item]);
-  }
-
-  const deleteContact = (id) => {
-    axios.delete(`${url}/${id}`);
-    
-    setContacts(contacts.filter(item => item.id !== id))
+    axios.post(url, item).then(
+      response => setContacts([...contacts, response.data])
+    );
   }
 
   return (
       <div className="container mt-5">
-        <div className="card">
-          <h1 className="card-header">Список контактов</h1>
-        </div>
+        <Routes>
+          <Route path="/" element={
+            <div className="card">
+              <h1 className="card-header">Список контактов</h1>
 
-        <TableComponent contacts={contacts}
-                        deleteContact={deleteContact}/>
-        <FormComponent addContact={addContact}
-        />
+              <TableComponent contacts={contacts}/>
+              <FormComponent addContact={addContact}/>
+            </div>
+          } />
+
+        <Route path="contacts/:id" element={
+          <ContactDetails/>
+        } />
+        </Routes>
       </div>
-
   );
 }
 

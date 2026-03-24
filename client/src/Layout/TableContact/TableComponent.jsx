@@ -21,7 +21,7 @@ const TableComponent = (props) => {
                                             id={item.id}
                                             name={item.name}
                                             email={item.email}
-                                            deleteContact={props.deleteContact}/>
+                        />
                         )
                     )
                 }
