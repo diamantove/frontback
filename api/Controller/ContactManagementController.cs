@@ -1,4 +1,6 @@
+using System.Numerics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 public class ContactManagementController : BaseController
 {
@@ -54,5 +56,21 @@ public class ContactManagementController : BaseController
             return Ok(res);
 
         return NotFound("Контакт с указанным ID не нашёлся.");
+    }
+
+    [HttpGet("contacts/page")]
+    public IActionResult GetContacts(int pageNumber, int pagesize)
+    {
+        var (contacts, total) = storage.GetContacts(pageNumber, pagesize);
+
+        var result = new
+        {
+            Contacts = contacts,
+            TotalPages = total,
+            CurrentPage = pageNumber,
+            PageSize = pagesize
+        };
+
+        return Ok(result);
     }
 }
